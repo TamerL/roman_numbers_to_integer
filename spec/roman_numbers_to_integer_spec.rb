@@ -1,27 +1,25 @@
 #require 'rspec_autorun'
 #require '../src/roman_numbers_to_integer'
 
-def get_int_num (rom)
-  if rom == "" || rom == nil || !rom.kind_of?(String)
+def convert_to_int_num_from(roman)
+  if roman == "" || roman == nil || !roman.kind_of?(String)
     return "please type a roman number starting from I"
   end
-
   int_number = 0
-  i = 0
-  romarr = rom.split('')
-  while i < romarr.length
-    if romarr[i + 1] && INT[romarr[i] + romarr[i + 1]]
-      int_number += INT[romarr[i] + romarr[i + 1]]
-      i += 2
-    else
-      int_number += INT[romarr[i]]
-      i += 1
+
+  while roman.length > 0 do
+    ROMAN_TO_INTEGER.each_key do |key|
+      if roman.start_with? key
+        int_number += ROMAN_TO_INTEGER[key]
+        roman = roman[key.length..-1]
+      end
     end
   end
+
   int_number
 end
 
-INT = {
+ROMAN_TO_INTEGER = {
   "CM" => 900,
   "CD" => 400,
   "XC" => 90,
@@ -41,96 +39,100 @@ INT = {
 describe 'roman_numbers_to_integer' do
   context "when the input is a valid roman number" do
     it "returns 1 for I" do
-      result = get_int_num("I")
+      result = convert_to_int_num_from("I")
       expect(result).to eq(1)
     end
     it "returns 4 for IV" do
-      result = get_int_num("IV")
+      result = convert_to_int_num_from("IV")
       expect(result).to eq(4)
     end
     it "returns 5 for V" do
-      result = get_int_num("V")
+      result = convert_to_int_num_from("V")
       expect(result).to eq(5)
     end
     it "returns 9 for IX" do
-      result = get_int_num("IX")
+      result = convert_to_int_num_from("IX")
       expect(result).to eq(9)
     end
     it "returns 10 for X" do
-      result = get_int_num("X")
+      result = convert_to_int_num_from("X")
       expect(result).to eq(10)
     end
     it "returns 50 for L" do
-      result = get_int_num("L")
+      result = convert_to_int_num_from("L")
       expect(result).to eq(50)
     end
     it "returns 90 for XC" do
-      result = get_int_num("XC")
+      result = convert_to_int_num_from("XC")
       expect(result).to eq(90)
     end
     it "returns 100 for C" do
-      result = get_int_num("C")
+      result = convert_to_int_num_from("C")
       expect(result).to eq(100)
     end
     it "returns 490 for CDXC" do
-      result = get_int_num("CDXC")
+      result = convert_to_int_num_from("CDXC")
       expect(result).to eq(490)
     end
     it "returns 500 for D" do
-      result = get_int_num("D")
+      result = convert_to_int_num_from("D")
       expect(result).to eq(500)
     end
     it "returns 900 for CM" do
-      result = get_int_num("CM")
+      result = convert_to_int_num_from("CM")
       expect(result).to eq(900)
     end
     it "returns 1000 for M" do
-      result = get_int_num("M")
+      result = convert_to_int_num_from("M")
       expect(result).to eq(1000)
     end
+    it "returns 7 for VII" do
+      result = convert_to_int_num_from("VII")
+      expect(result).to eq(7)
+    end
     it "returns 8 for VIII" do
-      result = get_int_num("VIII")
+      result = convert_to_int_num_from("VIII")
       expect(result).to eq(8)
     end
     it "returns 18 for XVIII" do
-      result = get_int_num("XVIII")
+      result = convert_to_int_num_from("XVIII")
       expect(result).to eq(18)
     end
     it "returns 68 for LXVIII" do
-      result = get_int_num("LXVIII")
+      result = convert_to_int_num_from("LXVIII")
       expect(result).to eq(68)
     end
     it "returns 168 for CLXVIII" do
-      result = get_int_num("CLXVIII")
+      result = convert_to_int_num_from("CLXVIII")
       expect(result).to eq(168)
     end
     it "returns 668 for DCLXVIII" do
-      result = get_int_num("DCLXVIII")
+      result = convert_to_int_num_from("DCLXVIII")
       expect(result).to eq(668)
     end
     it "returns an integer only" do
-      result = get_int_num("MDCLXVIII")
+      result = convert_to_int_num_from("MDCLXVIII")
       expect(result).to eq(1668)
     end
   end
 
   context "when the input is nil" do
     it "returns a message" do
-      result = get_int_num("")
+      result = convert_to_int_num_from("")
       expect(result).to eq("please type a roman number starting from I")
     end
   end
 
   context "when the input is an integer" do
     it "returns a message" do
-      result = get_int_num(1)
+      result = convert_to_int_num_from(1)
       expect(result).to eq("please type a roman number starting from I")
     end
   end
 
   context "when the input is a fraction" do
     it "returns a message" do
-      result = get_int_num(5.555)
+      result = convert_to_int_num_from(5.555)
       expect(result).to eq("please type a roman number starting from I")
     end
   end
