@@ -7,33 +7,27 @@ def get_int_num (rom)
   end
 
   int_number = 0
+  i = 0
   romarr = rom.split('')
-  j = 0
-  while j < romarr.length
-    r = romarr[j]
-    if romarr[j+1] && INT1[r+romarr[j+1]]
-      puts "new test"
-      puts romarr[j+1]
-      puts INT1[r+romarr[j+1]]
-      puts int_number
-      int_number += INT1[r+romarr[j+1]]
-      puts "if loop number = #{int_number}"
-      j += 2
-      return int_number if j == romarr.length
+  while i < romarr.length
+    if romarr[i + 1] && INT[romarr[i] + romarr[i + 1]]
+      int_number += INT[romarr[i] + romarr[i + 1]]
+      i += 2
     else
-      if INT10[r]
-        puts INT10[r]
-        int_number += INT10[r]
-        puts "else loop number = #{int_number}"
-        j += 1
-      end
+      int_number += INT[romarr[i]]
+      i += 1
     end
-
   end
   int_number
 end
 
-INT10 = {
+INT = {
+  "CM" => 900,
+  "CD" => 400,
+  "XC" => 90,
+  "XL" => 40,
+  "IX" => 9,
+  "IV" => 4,
   "M" => 1000,
   "D" => 500,
   "C" => 100,
@@ -43,14 +37,6 @@ INT10 = {
   "I" => 1
 }
 
-INT1 = {
-  "CM" => 900,
-  "CD" => 400,
-  "XC" => 90,
-  "XL" => 40,
-  "IX" => 9,
-  "IV" => 4,
-}
 
 describe 'roman_numbers_to_integer' do
   context "when the input is a valid roman number" do
